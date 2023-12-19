@@ -37,6 +37,7 @@ func (lc *LemmyClient) StreamNewPosts(pauseAfter int, closeChan chan struct{}) c
 			var postResponse PostsResponse
 			err = json.Unmarshal(postsBody, &postResponse)
 			if err != nil {
+				lc.logger.Sugar().Infof("postsBody: %s", postsBody)
 				lc.logger.Error(err.Error())
 			}
 
