@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  lemmy-links:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - API_VERSION=api/v3/
+      - BASE_URL=
+      - JWT_COOKIE=
+      - API_TOKEN=
