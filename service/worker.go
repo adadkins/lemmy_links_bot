@@ -2,10 +2,11 @@ package lemmylinks_service
 
 import (
 	"fmt"
-	glaw "lemmy_links_bot/lib"
 	"regexp"
 	"strconv"
 	"strings"
+
+	"github.com/adadkins/glaw"
 )
 
 func (a *App) Work(client glaw.Client, baseURL string) error {

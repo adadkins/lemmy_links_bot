@@ -2,10 +2,11 @@ package main
 
 import (
 	"fmt"
-	glaw "lemmy_links_bot/lib"
 	ll "lemmy_links_bot/service"
 	"net/http"
 	"os"
+
+	"github.com/adadkins/glaw"
 
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"

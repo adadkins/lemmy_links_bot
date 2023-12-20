@@ -1,8 +1,7 @@
 package lemmylinks_service
 
 import (
-	glaw "lemmy_links_bot/lib"
-
+	"github.com/adadkins/glaw"
 	"go.uber.org/zap"
 )
 

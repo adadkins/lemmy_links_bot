@@ -2,9 +2,10 @@ package lemmylinks_service
 
 import (
 	"errors"
-	glaw "lemmy_links_bot/lib"
 	"testing"
 	"time"
+
+	"github.com/adadkins/glaw"
 
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/zap"
