@@ -11,7 +11,7 @@ import (
 // calls an endpoint of a Lemmy instance API
 func (lc *LemmyClient) callLemmyAPI(method string, endpoint string, body io.Reader) ([]byte, error) {
 
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	// Prepare the request
@@ -35,15 +35,17 @@ func (lc *LemmyClient) callLemmyAPI(method string, endpoint string, body io.Read
 	}
 	defer resp.Body.Close()
 
-	// Check if the request was successful
-	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("request failed with status: %s", resp.Status)
-	}
-
 	// Read the response body
 	respBody, err := io.ReadAll(resp.Body)
 	if err != nil {
+		lc.logger.Error(err.Error())
 		return nil, err
+	}
+
+	// Check if the request was successful
+	if resp.StatusCode != http.StatusOK {
+		lc.logger.Sugar().Infof("request was not ok. code: %s, body: %s", resp.Status, respBody)
+		return nil, fmt.Errorf("request failed with status: %s", resp.Status)
 	}
 
 	return respBody, nil

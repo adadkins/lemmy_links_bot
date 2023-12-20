@@ -32,13 +32,13 @@ func (a *App) Work(client glaw.Client, baseURL string) error {
 						a.logger.Info("Author of comment and linked comment was the same, not messaging")
 						continue
 					}
+					a.logger.Sugar().Infof("Found a comment to message: %s", comment.ApID)
 					// message the comments author
 					err = client.SendPrivateMessage(fmt.Sprintf("One of your comments was linked by this comment: %s", comment.ApID), c.CreatorID)
 					if err != nil {
 						a.logger.Error(err.Error())
 						continue
 					}
-					a.logger.Sugar().Infof("Found a comment to message: %s", comment.ApID)
 				}
 				if strings.Contains(v, "post") {
 					id, err := a.extractPath(v)
@@ -63,7 +63,6 @@ func (a *App) Work(client glaw.Client, baseURL string) error {
 						continue
 					}
 					a.logger.Sugar().Infof("Found a comment to message: %s", comment.ApID)
-
 				}
 			}
 		}
