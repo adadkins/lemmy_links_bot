@@ -22,12 +22,12 @@ func (a *App) Work(client glaw.Client, baseURL string) error {
 					if err != nil {
 						a.logger.Sugar().Infoln("Link found: %s", v)
 						a.logger.Error(err.Error())
-						continue
+						continue commentLoop
 					}
 					c, err := client.GetComment(id)
 					if err != nil {
 						a.logger.Error(err.Error())
-						continue
+						continue commentLoop
 					}
 					if c.CreatorID == comment.CreatorID {
 						a.logger.Info("Author of comment and linked comment was the same, not messaging")
@@ -45,7 +45,7 @@ func (a *App) Work(client glaw.Client, baseURL string) error {
 					err = client.SendPrivateMessage(fmt.Sprintf("One of your comments was linked by this comment: %s", comment.ApID), c.CreatorID)
 					if err != nil {
 						a.logger.Error(err.Error())
-						continue
+						continue commentLoop
 					}
 				}
 				if strings.Contains(v, "post") {
@@ -53,12 +53,12 @@ func (a *App) Work(client glaw.Client, baseURL string) error {
 					if err != nil {
 						a.logger.Sugar().Infoln("Link found: %s", v)
 						a.logger.Error(err.Error())
-						continue
+						continue commentLoop
 					}
 					post, err := client.GetPost(id)
 					if err != nil {
 						a.logger.Error(err.Error())
-						continue
+						continue commentLoop
 					}
 					if post.CreatorID == comment.CreatorID {
 						a.logger.Info("Author of comment and post was the same, not messaging")
@@ -75,7 +75,7 @@ func (a *App) Work(client glaw.Client, baseURL string) error {
 					err = client.SendPrivateMessage(fmt.Sprintf("One of your posts was linked by this comment: %s", comment.ApID), post.CreatorID)
 					if err != nil {
 						a.logger.Error(err.Error())
-						continue
+						continue commentLoop
 					}
 					a.logger.Sugar().Infof("Found a comment to message: %s", comment.ApID)
 				}
