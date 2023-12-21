@@ -10,3 +10,4 @@ services:
       - BASE_URL=
       - JWT_COOKIE=
       - API_TOKEN=
+      - BANLISTED_ACCOUNT_IDS=

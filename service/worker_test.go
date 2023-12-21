@@ -31,7 +31,7 @@ func TestWorker(t *testing.T) {
 		}
 
 		mockGlawClient.SetComments(inputComments)
-		a, _ := NewApp(&mockGlawClient, zap.NewExample())
+		a, _ := NewApp(&mockGlawClient, zap.NewExample(), []int{})
 		// when
 		// do some work async
 		go a.Work(&mockGlawClient, "https://someURL.com/")
@@ -64,7 +64,7 @@ func TestWorker(t *testing.T) {
 		}
 
 		mockGlawClient.SetComments(inputComments)
-		a, _ := NewApp(&mockGlawClient, zap.NewExample())
+		a, _ := NewApp(&mockGlawClient, zap.NewExample(), []int{})
 		// when
 		// do some work async
 		go a.Work(&mockGlawClient, "https://someURL.com/")
@@ -100,7 +100,7 @@ func TestWorker(t *testing.T) {
 
 		mockGlawClient.SetComments(inputComments)
 		mockGlawClient.SetPosts(samplePosts)
-		a, _ := NewApp(&mockGlawClient, zap.NewExample())
+		a, _ := NewApp(&mockGlawClient, zap.NewExample(), []int{})
 		// when
 		// do some work async
 		go a.Work(&mockGlawClient, "https://someURL.com/")
@@ -114,7 +114,76 @@ func TestWorker(t *testing.T) {
 		expected := []MockPM{{id: 1111, message: "One of your posts was linked by this comment: https://https://someURL.com/comment/4"}}
 		assert.Equal(t, expected, sentPMs)
 	})
+	t.Run("Worker doesnt messages a user who has comment linked by a banlisted user", func(t *testing.T) {
+		// given
+		mockGlawClient := NewMockGlawClient()
 
+		// set the comments we want to loop over
+		inputComments := []glaw.Comment{
+			{
+				Content:   "Hey Check out this comment https://someURL.com/comment/1111",
+				CreatorID: 1111,
+				ApID:      "https://https://someURL.com/comment/1",
+			},
+			{
+				Content:   "Hey Check out this comment https://someURL.com/comment/1111",
+				CreatorID: 2222,
+				ApID:      "https://https://someURL.com/comment/2",
+			},
+		}
+
+		mockGlawClient.SetComments(inputComments)
+		a, _ := NewApp(&mockGlawClient, zap.NewExample(), []int{1111, 2222})
+		// when
+		// do some work async
+		go a.Work(&mockGlawClient, "https://someURL.com/")
+
+		time.Sleep(2 * time.Second)
+
+		// then
+		// get the pms
+		sentPMs := mockGlawClient.GetSentPMs()
+
+		expected := []MockPM(nil)
+		assert.Equal(t, expected, sentPMs)
+	})
+
+	t.Run("Worker doesnt message a user who has a post linked by a banlisted user", func(t *testing.T) {
+		// given
+		mockGlawClient := NewMockGlawClient()
+
+		// set the comments we want to loop over
+		inputComments := []glaw.Comment{
+			{
+				Content:   "Hey Check out this post https://someURL.com/post/2222",
+				CreatorID: 1111,
+				ApID:      "https://https://someURL.com/comment/3",
+			},
+			{
+				Content:   "Hey Check out this post https://someURL.com/post/2222",
+				CreatorID: 2222,
+				ApID:      "https://https://someURL.com/comment/4",
+			},
+		}
+
+		samplePosts := []glaw.Post{{ApID: "https://https://someURL.com/comment/3", CreatorID: 1111}}
+
+		mockGlawClient.SetComments(inputComments)
+		mockGlawClient.SetPosts(samplePosts)
+		a, _ := NewApp(&mockGlawClient, zap.NewExample(), []int{1111, 2222})
+		// when
+		// do some work async
+		go a.Work(&mockGlawClient, "https://someURL.com/")
+
+		time.Sleep(2 * time.Second)
+
+		// then
+		// get the pms
+		sentPMs := mockGlawClient.GetSentPMs()
+
+		expected := []MockPM(nil)
+		assert.Equal(t, expected, sentPMs)
+	})
 	// t.Run("Worker handles a shutdown of the comment channel", func(t *testing.T) {
 	// 	// given
 	// 	mockGlawClient := NewMockGlawClient()
@@ -193,7 +262,7 @@ func TestWorker(t *testing.T) {
 
 		mockGlawClient.SetComments(inputComments)
 		mockGlawClient.SetPosts(samplePosts)
-		a, _ := NewApp(&mockGlawClient, zap.NewExample())
+		a, _ := NewApp(&mockGlawClient, zap.NewExample(), []int{})
 		// when
 		// do some work async
 		go a.Work(&mockGlawClient, "https://someURL.com/")
@@ -228,7 +297,7 @@ func TestWorker(t *testing.T) {
 
 		mockGlawClient.SetComments(inputComments)
 		mockGlawClient.err = errors.New("Get Comment Error")
-		a, _ := NewApp(&mockGlawClient, zap.NewExample())
+		a, _ := NewApp(&mockGlawClient, zap.NewExample(), []int{})
 
 		// when
 		// do some work async
@@ -264,7 +333,7 @@ func TestWorker(t *testing.T) {
 
 		mockGlawClient.SetComments(inputComments)
 		mockGlawClient.err = errors.New("Get Post Error")
-		a, _ := NewApp(&mockGlawClient, zap.NewExample())
+		a, _ := NewApp(&mockGlawClient, zap.NewExample(), []int{})
 
 		// when
 		go a.Work(&mockGlawClient, "https://someURL.com/")
@@ -309,7 +378,7 @@ func TestWorker(t *testing.T) {
 		mockGlawClient.err = errors.New("Private Message Error")
 		samplePosts := []glaw.Post{{ApID: "3", CreatorID: 1111}}
 		mockGlawClient.SetPosts(samplePosts)
-		a, _ := NewApp(&mockGlawClient, zap.NewExample())
+		a, _ := NewApp(&mockGlawClient, zap.NewExample(), []int{})
 
 		// when
 		go a.Work(&mockGlawClient, "https://someURL.com/")

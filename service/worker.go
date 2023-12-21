@@ -14,7 +14,7 @@ func (a *App) Work(client glaw.Client, baseURL string) error {
 	postComments := client.StreamNewComments(5, a.done)
 	for comment := range postComments {
 		urls := extractURLs(comment.Content)
-
+	commentLoop:
 		for _, v := range urls {
 			if strings.Contains(v, baseURL) {
 				if strings.Contains(v, "comment") {
@@ -31,7 +31,14 @@ func (a *App) Work(client glaw.Client, baseURL string) error {
 					}
 					if c.CreatorID == comment.CreatorID {
 						a.logger.Info("Author of comment and linked comment was the same, not messaging")
-						continue
+						continue commentLoop
+					}
+					// check if linker is a ban listed account
+					for _, v := range a.banListedAccounts {
+						if c.CreatorID == v || comment.CreatorID == v {
+							a.logger.Sugar().Infof("BANLISTED! Comment: %s, ApiID: %s, postCreatorID: %s, commentCreatorID: %s, Blacklisted: %s", comment.Content, comment.ApID, c.CreatorID, comment.CreatorID, v)
+							continue commentLoop
+						}
 					}
 					a.logger.Sugar().Infof("Found a comment to message: %s", comment.ApID)
 					// message the comments author
@@ -55,7 +62,14 @@ func (a *App) Work(client glaw.Client, baseURL string) error {
 					}
 					if post.CreatorID == comment.CreatorID {
 						a.logger.Info("Author of comment and post was the same, not messaging")
-						continue
+						continue commentLoop
+
+					}
+					for _, v := range a.banListedAccounts {
+						if post.CreatorID == v || comment.CreatorID == v {
+							a.logger.Sugar().Infof("BANLISTED! Comment: %s, ApiID: %s, postCreatorID: %s, commentCreatorID: %s, Banlisted: %s", comment.Content, comment.ApID, post.CreatorID, comment.CreatorID, v)
+							continue commentLoop
+						}
 					}
 					// message the comments author
 					err = client.SendPrivateMessage(fmt.Sprintf("One of your posts was linked by this comment: %s", comment.ApID), post.CreatorID)

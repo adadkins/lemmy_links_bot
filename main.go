@@ -5,6 +5,8 @@ import (
 	ll "lemmy_links_bot/service"
 	"net/http"
 	"os"
+	"strconv"
+	"strings"
 
 	"github.com/adadkins/glaw"
 
@@ -17,6 +19,16 @@ func main() {
 	baseURL := os.Getenv("BASE_URL")
 	jwtCookie := os.Getenv("JWT_COOKIE")
 	apiToken := os.Getenv("API_TOKEN")
+	banListedAccounts := []int{}
+
+	for _, str := range strings.Split(os.Getenv("BANLISTED_ACCOUNT_IDS"), ",") {
+		intValue, err := strconv.Atoi(str)
+		if err != nil {
+			fmt.Printf("Error converting '%s' to an integer: %v\n", str, err)
+			return
+		}
+		banListedAccounts = append(banListedAccounts, intValue)
+	}
 
 	config := zap.NewDevelopmentConfig()
 
@@ -32,6 +44,6 @@ func main() {
 		return
 	}
 
-	a, _ := ll.NewApp(client, logger)
+	a, _ := ll.NewApp(client, logger, banListedAccounts)
 	a.Work(client, baseURL)
 }
