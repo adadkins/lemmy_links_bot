@@ -10,9 +10,10 @@ type App struct {
 	done              chan struct{}
 	lemmyClient       glaw.Client
 	logger            *zap.Logger
+	baseURL           string
 }
 
-func NewApp(lc glaw.Client, logger *zap.Logger, banListedAccounts []int) (*App, error) {
+func NewApp(lc glaw.Client, logger *zap.Logger, banListedAccounts []int, baseURL string) (*App, error) {
 	// TODO: how do i properly shut this down?
 	done := make(chan struct{})
 
@@ -21,5 +22,6 @@ func NewApp(lc glaw.Client, logger *zap.Logger, banListedAccounts []int) (*App, 
 		done:              done,
 		lemmyClient:       lc,
 		logger:            logger,
+		baseURL:           baseURL,
 	}, nil
 }

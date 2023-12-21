@@ -31,10 +31,10 @@ func TestWorker(t *testing.T) {
 		}
 
 		mockGlawClient.SetComments(inputComments)
-		a, _ := NewApp(&mockGlawClient, zap.NewExample(), []int{})
+		a, _ := NewApp(&mockGlawClient, zap.NewExample(), []int{}, "https://someURL.com/")
 		// when
 		// do some work async
-		go a.Work(&mockGlawClient, "https://someURL.com/")
+		go a.Work()
 
 		time.Sleep(2 * time.Second)
 
@@ -64,10 +64,10 @@ func TestWorker(t *testing.T) {
 		}
 
 		mockGlawClient.SetComments(inputComments)
-		a, _ := NewApp(&mockGlawClient, zap.NewExample(), []int{})
+		a, _ := NewApp(&mockGlawClient, zap.NewExample(), []int{}, "https://someURL.com/")
 		// when
 		// do some work async
-		go a.Work(&mockGlawClient, "https://someURL.com/")
+		go a.Work()
 
 		time.Sleep(2 * time.Second)
 
@@ -100,10 +100,10 @@ func TestWorker(t *testing.T) {
 
 		mockGlawClient.SetComments(inputComments)
 		mockGlawClient.SetPosts(samplePosts)
-		a, _ := NewApp(&mockGlawClient, zap.NewExample(), []int{})
+		a, _ := NewApp(&mockGlawClient, zap.NewExample(), []int{}, "https://someURL.com/")
 		// when
 		// do some work async
-		go a.Work(&mockGlawClient, "https://someURL.com/")
+		go a.Work()
 
 		time.Sleep(2 * time.Second)
 
@@ -133,10 +133,10 @@ func TestWorker(t *testing.T) {
 		}
 
 		mockGlawClient.SetComments(inputComments)
-		a, _ := NewApp(&mockGlawClient, zap.NewExample(), []int{1111, 2222})
+		a, _ := NewApp(&mockGlawClient, zap.NewExample(), []int{1111, 2222}, "https://someURL.com/")
 		// when
 		// do some work async
-		go a.Work(&mockGlawClient, "https://someURL.com/")
+		go a.Work()
 
 		time.Sleep(2 * time.Second)
 
@@ -170,10 +170,10 @@ func TestWorker(t *testing.T) {
 
 		mockGlawClient.SetComments(inputComments)
 		mockGlawClient.SetPosts(samplePosts)
-		a, _ := NewApp(&mockGlawClient, zap.NewExample(), []int{1111, 2222})
+		a, _ := NewApp(&mockGlawClient, zap.NewExample(), []int{1111, 2222}, "https://someURL.com/")
 		// when
 		// do some work async
-		go a.Work(&mockGlawClient, "https://someURL.com/")
+		go a.Work()
 
 		time.Sleep(2 * time.Second)
 
@@ -206,7 +206,7 @@ func TestWorker(t *testing.T) {
 	// 	a, _ := NewApp(&mockGlawClient)
 	// 	// when
 	// 	// do some work async
-	// 	go a.Work(&mockGlawClient, "https://someURL.com/")
+	// 	go a.Work()
 
 	// 	time.Sleep(2 * time.Second)
 
@@ -262,10 +262,10 @@ func TestWorker(t *testing.T) {
 
 		mockGlawClient.SetComments(inputComments)
 		mockGlawClient.SetPosts(samplePosts)
-		a, _ := NewApp(&mockGlawClient, zap.NewExample(), []int{})
+		a, _ := NewApp(&mockGlawClient, zap.NewExample(), []int{}, "https://someURL.com/")
 		// when
 		// do some work async
-		go a.Work(&mockGlawClient, "https://someURL.com/")
+		go a.Work()
 
 		time.Sleep(2 * time.Second)
 
@@ -297,11 +297,11 @@ func TestWorker(t *testing.T) {
 
 		mockGlawClient.SetComments(inputComments)
 		mockGlawClient.err = errors.New("Get Comment Error")
-		a, _ := NewApp(&mockGlawClient, zap.NewExample(), []int{})
+		a, _ := NewApp(&mockGlawClient, zap.NewExample(), []int{}, "https://someURL.com/")
 
 		// when
 		// do some work async
-		go a.Work(&mockGlawClient, "https://someURL.com/")
+		go a.Work()
 
 		time.Sleep(2 * time.Second)
 
@@ -333,10 +333,10 @@ func TestWorker(t *testing.T) {
 
 		mockGlawClient.SetComments(inputComments)
 		mockGlawClient.err = errors.New("Get Post Error")
-		a, _ := NewApp(&mockGlawClient, zap.NewExample(), []int{})
+		a, _ := NewApp(&mockGlawClient, zap.NewExample(), []int{}, "https://someURL.com/")
 
 		// when
-		go a.Work(&mockGlawClient, "https://someURL.com/")
+		go a.Work()
 
 		// then
 		time.Sleep(2 * time.Second)
@@ -378,10 +378,10 @@ func TestWorker(t *testing.T) {
 		mockGlawClient.err = errors.New("Private Message Error")
 		samplePosts := []glaw.Post{{ApID: "3", CreatorID: 1111}}
 		mockGlawClient.SetPosts(samplePosts)
-		a, _ := NewApp(&mockGlawClient, zap.NewExample(), []int{})
+		a, _ := NewApp(&mockGlawClient, zap.NewExample(), []int{}, "https://someURL.com/")
 
 		// when
-		go a.Work(&mockGlawClient, "https://someURL.com/")
+		go a.Work()
 
 		// then
 		time.Sleep(2 * time.Second)

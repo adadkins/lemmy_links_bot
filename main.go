@@ -44,6 +44,6 @@ func main() {
 		return
 	}
 
-	a, _ := ll.NewApp(client, logger, banListedAccounts)
-	a.Work(client, baseURL)
+	a, _ := ll.NewApp(client, logger, banListedAccounts, baseURL)
+	a.Work()
 }
