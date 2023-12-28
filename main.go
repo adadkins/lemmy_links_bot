@@ -3,12 +3,12 @@ package main
 import (
 	"fmt"
 	ll "lemmy_links_bot/service"
-	"net/http"
 	"os"
 	"strconv"
 	"strings"
 
 	"github.com/adadkins/glaw"
+	"github.com/hashicorp/go-retryablehttp"
 
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -38,7 +38,11 @@ func main() {
 	// Create a Zap logger based on the configuration
 	logger, _ := config.Build()
 
-	client, err := glaw.NewLemmyClient(fmt.Sprintf("%s%s", baseURL, apiVersion), apiToken, jwtCookie, &http.Client{}, logger)
+	// configure retryable client
+	retryClient := retryablehttp.NewClient()
+	retryClient.RetryMax = 5
+
+	client, err := glaw.NewLemmyClient(fmt.Sprintf("%s%s", baseURL, apiVersion), apiToken, jwtCookie, retryClient.StandardClient(), logger)
 	if err != nil {
 		logger.Error(err.Error())
 		return
