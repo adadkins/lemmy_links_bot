@@ -11,3 +11,4 @@ services:
       - JWT_COOKIE=
       - API_TOKEN=
       - BANLISTED_ACCOUNT_IDS=
+      - LOG_LEVEL=
