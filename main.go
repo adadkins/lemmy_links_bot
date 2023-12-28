@@ -29,14 +29,10 @@ func main() {
 		}
 		banListedAccounts = append(banListedAccounts, intValue)
 	}
-
-	config := zap.NewDevelopmentConfig()
-
-	// AddCaller option includes line numbers, file names, and function names
-	config.EncoderConfig.EncodeCaller = zapcore.FullCallerEncoder
-
-	// Create a Zap logger based on the configuration
-	logger, _ := config.Build()
+	logger, err := setupLogger()
+	if err != nil {
+		panic("Error setting up logger: " + err.Error())
+	}
 
 	// configure retryable client
 	retryClient := retryablehttp.NewClient()
@@ -50,4 +46,34 @@ func main() {
 
 	a, _ := ll.NewApp(client, logger, banListedAccounts, baseURL)
 	a.Work()
+}
+
+func getLogLevel() zapcore.Level {
+	envLogLevel := strings.ToLower(os.Getenv("LOG_LEVEL"))
+
+	switch envLogLevel {
+	case "debug":
+		return zapcore.DebugLevel
+	case "info":
+		return zapcore.InfoLevel
+	case "warn":
+		return zapcore.WarnLevel
+	case "error":
+		return zapcore.ErrorLevel
+	default:
+		return zapcore.InfoLevel
+	}
+}
+
+func setupLogger() (*zap.Logger, error) {
+	config := zap.NewDevelopmentConfig()
+
+	// Set the logging level based on the environment variable
+	config.Level.SetLevel(getLogLevel())
+
+	// AddCaller option includes line numbers, file names, and function names
+	config.EncoderConfig.EncodeCaller = zapcore.FullCallerEncoder
+
+	// Create a Zap logger based on the configuration
+	return config.Build()
 }
