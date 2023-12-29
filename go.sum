@@ -1,5 +1,5 @@
-github.com/adadkins/glaw v1.0.4 h1:qbZwsKY/pPwsq9JsiEgje+F11lD5KJblSaX767F+NHo=
-github.com/adadkins/glaw v1.0.4/go.mod h1:5Y8j19M/3w5CjOlNv/7c6kQkVFNpHvurg7wgTnJgHVU=
+github.com/adadkins/glaw v1.1.0 h1:FX85egdzxm+ba5Vmqydk5aGhUgkfzuVCMYbMSZtTyTs=
+github.com/adadkins/glaw v1.1.0/go.mod h1:5Y8j19M/3w5CjOlNv/7c6kQkVFNpHvurg7wgTnJgHVU=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/hashicorp/go-cleanhttp v0.5.2 h1:035FKYIWjmULyFRBKPs8TBQoi0x6d9G4xc9neXJWAZQ=
