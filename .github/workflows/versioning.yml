@@ -19,17 +19,11 @@ jobs:
         git config --local user.name "GitHub Action"
         git fetch --tags
 
-        # Get the latest tag and extract major, minor, and patch components
+        # Get the latest tag
         latest_tag=$(git tag --sort=-v:refname | head -n 1)
-        IFS='.' read -r -a version_components <<< "$latest_tag"
-        
-        major=${version_components[0]}
-        minor=${version_components[1]}
-        patch=${version_components[2]}
 
         # Increment the minor version
-        new_minor=$((minor + 1))
-        new_version="${major}.${new_minor}.${patch}"
+        new_version=$(echo $latest_tag | awk -F. '{print $1 "." ($2+1) "." $3}')
 
         git tag -a "v${new_version}" -m "Release v${new_version}"
         git push origin "v${new_version}"
