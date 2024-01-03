@@ -1,0 +1,35 @@
+name: Increment Version and Create Tag
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  increment-tag:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Bump version and create tag
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git fetch --tags
+
+        # Get the latest tag and extract major, minor, and patch components
+        latest_tag=$(git tag --sort=-v:refname | head -n 1)
+        IFS='.' read -r -a version_components <<< "$latest_tag"
+        
+        major=${version_components[0]}
+        minor=${version_components[1]}
+        patch=${version_components[2]}
+
+        # Increment the minor version
+        new_minor=$((minor + 1))
+        new_version="${major}.${new_minor}.${patch}"
+
+        git tag -a "v${new_version}" -m "Release v${new_version}"
+        git push origin "v${new_version}"
