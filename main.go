@@ -34,7 +34,7 @@ func main() {
 		panic("Error setting up logger: " + err.Error())
 	}
 
-	client, err := glaw.NewLemmyClient(fmt.Sprintf("%s%s", baseURL, apiVersion), apiToken, jwtCookie, &http.Client{}, logger)
+	client, err := glaw.NewLemmyClient(fmt.Sprintf("%s%s", baseURL, apiVersion), apiToken, jwtCookie, &http.Client{})
 	if err != nil {
 		logger.Error(err.Error())
 		return

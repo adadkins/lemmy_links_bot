@@ -3,7 +3,7 @@ module lemmy_links_bot
 go 1.21.0
 
 require (
-	github.com/adadkins/glaw v1.4.0
+	github.com/adadkins/glaw v1.6.0
 	github.com/stretchr/testify v1.8.4
 	go.uber.org/zap v1.26.0
 )

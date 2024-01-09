@@ -1,5 +1,5 @@
-github.com/adadkins/glaw v1.4.0 h1:jGgH5htn/7qoQ3VhQdJ7x5oBx1kydyrTXbvujcrp+Lk=
-github.com/adadkins/glaw v1.4.0/go.mod h1:5Y8j19M/3w5CjOlNv/7c6kQkVFNpHvurg7wgTnJgHVU=
+github.com/adadkins/glaw v1.6.0 h1:MW0xiPTF+OBn1LdBPZm5pPM52duSWwycd0j6WwWdavM=
+github.com/adadkins/glaw v1.6.0/go.mod h1:DiXDBHccB/3pBWgY/xhHcAZnRFpPgGZxjSvDFtg5EpM=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
