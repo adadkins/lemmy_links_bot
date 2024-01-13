@@ -11,20 +11,20 @@ import (
 
 func (a *App) Work() error {
 	a.logger.Info("Starting streaming comments...")
-	postComments := a.lemmyClient.StreamNewComments(5, a.done)
+	postComments := a.lemmyClient.StreamNewComments(10, a.done)
 	for comment := range postComments {
 		urls := extractURLs(comment.Content)
 	commentLoop:
 		for _, url := range urls {
 			if strings.Contains(url, a.baseURL) {
-				if strings.Contains(url, "comment") {
+				if strings.Contains(url, "/comment/") {
 					err := a.handleLinkingToComment(comment, url)
 					if err != nil {
 						a.logger.Error(err.Error())
 						continue commentLoop
 					}
 				}
-				if strings.Contains(url, "post") {
+				if strings.Contains(url, "/post/") {
 					err := a.handleLinkingToPost(comment, url)
 					if err != nil {
 						a.logger.Error(err.Error())
@@ -83,12 +83,14 @@ func (a *App) handleLinkingToComment(comment glaw.Comment, link string) error {
 		return err
 	}
 	if c.CreatorID == comment.CreatorID {
-		return fmt.Errorf("Author of comment and linked comment was the same, not messaging")
+		//return fmt.Errorf("Author of comment and post was the same, not messaging")
+		return nil
 	}
 	// check if linker is a ban listed account
 	for _, v := range a.banListedAccounts {
 		if c.CreatorID == v || comment.CreatorID == v {
-			return fmt.Errorf("BANLISTED! Comment: %s, ApiID: %s, postCreatorID: %v, commentCreatorID: %v, Blacklisted: %v", comment.Content, comment.ApID, c.CreatorID, comment.CreatorID, v)
+			return nil
+			//return fmt.Errorf("BANLISTED! Comment: %s, ApiID: %s, postCreatorID: %v, commentCreatorID: %v, Blacklisted: %v", comment.Content, comment.ApID, c.CreatorID, comment.CreatorID, v)
 		}
 	}
 	a.logger.Sugar().Infof("Found a comment to message: %s", comment.ApID)
@@ -103,7 +105,7 @@ func (a *App) handleLinkingToComment(comment glaw.Comment, link string) error {
 func (a *App) handleLinkingToPost(comment glaw.Comment, link string) error {
 	id, err := extractPath(link)
 	if err != nil {
-		a.logger.Sugar().Infoln("Link found: %s", link)
+		a.logger.Sugar().Infoln("Link found: %s, err: %s", link, err)
 		return err
 	}
 	post, err := a.lemmyClient.GetPost(id)
@@ -111,11 +113,13 @@ func (a *App) handleLinkingToPost(comment glaw.Comment, link string) error {
 		return err
 	}
 	if post.CreatorID == comment.CreatorID {
-		return fmt.Errorf("Author of comment and post was the same, not messaging")
+		//return fmt.Errorf("Author of comment and post was the same, not messaging")
+		return nil
 	}
 	for _, v := range a.banListedAccounts {
 		if post.CreatorID == v || comment.CreatorID == v {
-			return fmt.Errorf("BANLISTED! Comment: %s, ApiID: %s, postCreatorID: %v, commentCreatorID: %v, Banlisted: %v", comment.Content, comment.ApID, post.CreatorID, comment.CreatorID, v)
+			//return fmt.Errorf("BANLISTED! Comment: %s, ApiID: %s, postCreatorID: %v, commentCreatorID: %v, Banlisted: %v", comment.Content, comment.ApID, post.CreatorID, comment.CreatorID, v)
+			return nil
 		}
 	}
 	// message the comments author

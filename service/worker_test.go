@@ -256,6 +256,11 @@ func TestWorker(t *testing.T) {
 				CreatorID: 2222,
 				ApID:      "4",
 			},
+			{
+				Content:   "Hey Check out this community link (https://someURL.com/c/lemmyshitpost)",
+				CreatorID: 2222,
+				ApID:      "4",
+			},
 		}
 
 		samplePosts := []glaw.Post{{ApID: "3", CreatorID: 1111}}
@@ -267,7 +272,7 @@ func TestWorker(t *testing.T) {
 		// do some work async
 		go a.Work()
 
-		time.Sleep(2 * time.Second)
+		time.Sleep(10 * time.Second)
 
 		// then
 		// get the pms
